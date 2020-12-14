@@ -1,5 +1,8 @@
 package médiathèque;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class DVD implements Document {
 	Abonne ab;
 	
@@ -23,28 +26,41 @@ public class DVD implements Document {
 	}
 	
 	public boolean estPourAdulte() {
-		return true;
+		return adulte;
 	}
 	
 	public boolean estDisponible() {
-		return true;
+		return estDisponible;
 	}
 
+	public boolean peutPrendre(Abonne ab){
+		Date date1 = ab.getDateDeNaissance();
+		Calendar today = Calendar.getInstance();
+		Date ajd = today.getTime();
+		if (ajd.compareTo(date1) > 0 || ajd.compareTo(date1) == 0){
+			return true;
+		}else
+			return false;
+	}
 	@Override
 	public void reservationPour(Abonne ab) throws ReservationException {
-		// TODO Auto-generated method stub
+		if(this.peutPrendre(ab))
+			this.ab = ab;
+		
 
 	}
 
 	@Override
 	public void empruntPar(Abonne ab) throws EmpruntException {
-		// TODO Auto-generated method stub
+		estDisponible = false;
+		this.ab = ab;
 
 	}
 
 	@Override
 	public void retour() {
-		// TODO Auto-generated method stub
+		this.ab = null;
+		estDisponible = true;
 
 	}
 
